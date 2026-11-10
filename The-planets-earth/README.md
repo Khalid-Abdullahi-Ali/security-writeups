@@ -1,4 +1,4 @@
-# 🌍 The Planets: Earth: Findings Report
+# The Planets: Earth: Findings Report
 
 [![Medium](https://img.shields.io/badge/Full%20walkthrough-Medium-8A2BE2?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@khalid_abdullahi)
 ![Platform](https://img.shields.io/badge/Platform-VulnHub-4B0082?style=for-the-badge)
@@ -9,7 +9,7 @@
 
 ---
 
-## 📝 Summary
+## Summary
 
 Starting with no credentials, I gained root on a Django-based "secure messaging" server by chaining weaknesses in design rather than a single software bug: internal hostnames leaked by a TLS certificate, developer notes left on a test site, a home-made XOR "encryption" scheme with a reused key, an admin tool that runs commands by design, and a root-owned helper binary that resets the root password. The most important lesson is the cryptography one: the system was described as "safe", but it was not.
 
@@ -21,13 +21,13 @@ Starting with no credentials, I gained root on a Django-based "secure messaging"
 | **Highest access** | root |
 | **Flags captured** | 2 of 2 (values redacted) |
 
-## 🔗 Attack Chain
+## Attack Chain
 
 `TLS certificate leaks hostnames` → `Hidden test site with developer notes` → `Known test data + reused XOR key` → `Admin password recovered from stored messages` → `Admin command tool = code execution` → `Weak outbound filter bypassed` → `Shell as apache` → `Custom SUID binary` → `Root password reset` → `root`
 
 ---
 
-## 📊 Findings
+## Findings
 
 | # | Finding | CWE | Severity |
 | - | ------- | --- | -------- |
@@ -40,7 +40,7 @@ Starting with no credentials, I gained root on a Django-based "secure messaging"
 
 ---
 
-## 🔍 Finding Details
+## Finding Details
 
 ### 1. TLS certificate leaks internal hostnames
 
@@ -121,14 +121,14 @@ Adding those names to my local hosts file revealed two sites that the IP alone d
 
 ---
 
-## ✅ Key Takeaways
+## My Takeaway
 
 1. **Enumerate by hostname, not only by IP.** The real application was on a virtual host that the IP did not serve.
 2. **"Not standard" is a signal.** A custom SUID binary is far more interesting than the usual list.
 3. **Cryptography is not a feature to improvise.** A reused XOR key undid the whole messaging system.
 4. **Blocklists are weak controls.** Allow-lists and network-level egress rules hold up better.
 
-## 📚 References
+## References
 
 - [OWASP Top 10: A02 Cryptographic Failures](https://owasp.org/Top10/)
 - [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
