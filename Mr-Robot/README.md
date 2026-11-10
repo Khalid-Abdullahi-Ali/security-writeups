@@ -1,4 +1,4 @@
-# 🤖 Mr. Robot CTF: Findings Report
+# Mr. Robot CTF: Findings Report
 
 [![Medium](https://img.shields.io/badge/Full%20walkthrough-Medium-8A2BE2?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@khalid_abdullahi/mr-robot-ctf-90467b3c8ab9)
 ![Platform](https://img.shields.io/badge/Platform-TryHackMe-4B0082?style=for-the-badge)
@@ -9,7 +9,7 @@
 
 ---
 
-## 📝 Summary
+## Summary
 
 Starting with no credentials, I gained full root access to a WordPress server by chaining six weaknesses: sensitive files exposed through `robots.txt`, credentials hidden in a public page, a login form that reveals valid usernames, no brute-force protection, an admin editor that allows arbitrary code, and a SUID binary that allows privilege escalation. Each issue alone is moderate. Chained, they give complete compromise.
 
@@ -21,13 +21,13 @@ Starting with no credentials, I gained full root access to a WordPress server by
 | **Highest access** | root |
 | **Keys captured** | 3 of 3 (values redacted) |
 
-## 🔗 Attack Chain
+## Attack Chain
 
 `Exposed robots.txt` → `Public wordlist + key 1` → `Encoded credentials on a public page` → `Username enumeration` → `No lockout on login` → `WordPress admin` → `Code execution via theme editor` → `Weak password hash in readable file` → `User pivot` → `SUID binary` → `root`
 
 ---
 
-## 📊 Findings
+## Findings
 
 | # | Finding | CWE | Severity |
 | - | ------- | --- | -------- |
@@ -41,7 +41,7 @@ Starting with no credentials, I gained full root access to a WordPress server by
 
 ---
 
-## 🔍 Finding Details
+## Finding Details
 
 ### 1. Sensitive files exposed via `robots.txt`
 
@@ -127,13 +127,13 @@ Starting with no credentials, I gained full root access to a WordPress server by
 
 ---
 
-## ✅ Key Takeaways
+## My Takeaway
 
 1. **Chained issues matter more than single ones.** Several medium and low findings combined into full root access.
 2. **Obscurity is not security.** Hidden files, encoded strings and `robots.txt` entries protect nothing.
 3. **Defence in depth would have broken the chain at many points:** generic login errors, rate limiting, disabled file editing, strong hashing and removing the SUID bit.
 
-## 📚 References
+## References
 
 - [OWASP Top 10: A07 Identification and Authentication Failures](https://owasp.org/Top10/)
 - [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
