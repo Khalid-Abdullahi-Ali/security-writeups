@@ -1,4 +1,4 @@
-# 💉 SQL Injection with sqlmap: DVWA
+# SQL Injection with sqlmap: DVWA
 
 ![Platform](https://img.shields.io/badge/Platform-University%20Lab%20(Ethical%20Hacking)-4B0082?style=for-the-badge)
 ![Target](https://img.shields.io/badge/Target-DVWA-6A0DAD?style=for-the-badge)
@@ -9,7 +9,7 @@
 
 ---
 
-## 📝 Summary
+## Summary
 
 This lab automates an SQL injection attack against DVWA's SQL Injection module using sqlmap, after first confirming the vulnerability manually (UNION-based injection through the browser and Burp Suite). sqlmap identified the `id` GET parameter as injectable via both time-based blind and UNION query techniques, fingerprinted the back-end stack, enumerated every database and table on the server, and dumped full table contents, including automatically cracking the weak unsalted MD5 password hashes it found along the way. What took several manual payloads and a separate hash-cracking step was reproduced, and extended, in a handful of automated commands.
 
@@ -21,13 +21,13 @@ This lab automates an SQL injection attack against DVWA's SQL Injection module u
 | **Back-end stack** | MySQL ≥ 5.0.12 (MariaDB fork), Apache 2.4.66, Linux Debian |
 | **Result** | 4 databases enumerated; `users` and `guestbook` tables fully dumped, including cracked password hashes |
 
-## 🔗 Attack Chain
+## Attack Chain
 
 `Manual UNION injection confirms the flaw` → `Capture authenticated session via DevTools` → `sqlmap --dbs fingerprints the stack and lists databases` → `sqlmap --tables enumerates the dvwa database` → `sqlmap --dump pulls full table contents` → `Weak MD5 hashes auto-cracked`
 
 ---
 
-## 🎯 Scope & Setup
+## Scope & Setup
 
 - **Target:** DVWA (Damn Vulnerable Web Application), Security Level: Low
 - **Tools:** Kali Linux, sqlmap v1.10.6#stable, Burp Suite, Firefox Developer Tools (Network tab)
@@ -36,7 +36,7 @@ This lab automates an SQL injection attack against DVWA's SQL Injection module u
 
 ---
 
-## 📚 Theory
+## Theory
 
 sqlmap automates the process of detecting and exploiting SQL injection flaws and taking over database servers. Instead of manually crafting and sending UNION-based payloads one at a time, it sends a large, structured series of test payloads against a given parameter and analyzes the HTTP responses to determine which injection technique(s) the parameter is vulnerable to. It tests for several categories automatically:
 
@@ -50,7 +50,7 @@ In this lab, sqlmap identified the `id` parameter as vulnerable to both a time-b
 
 ---
 
-## 🔍 Procedure
+## Procedure
 
 ### 1. Capture an authenticated session
 
@@ -112,7 +112,7 @@ Confirmed sqlmap could pull data from any table in the database, not just `users
 
 ---
 
-## 📊 Findings
+## Findings
 
 | # | Finding | CWE | Severity |
 | - | ------- | --- | -------- |
@@ -133,14 +133,14 @@ Confirmed sqlmap could pull data from any table in the database, not just `users
 
 ---
 
-## ✅ Key Takeaways
+## My Takeaway
 
 1. **Automated tools don't find new bugs here — they scale existing ones.** sqlmap reproduced, in minutes, what took several manual UNION payloads and a separate cracking step by hand. That's exactly why they matter in real-world assessments: time saved on confirmation means more time for deeper analysis elsewhere.
 2. **One unvalidated parameter is enough to expose everything.** The entire database was readable through a single injectable `id` field.
 3. **Weak hashing compounds an injection finding.** Even if the injection itself were somehow mitigated for new data, the existing weak hashes remain crackable the moment they're exposed by any other means.
 4. **The only durable fix is server-side.** Parameterized queries close the injection vector regardless of what validation does or doesn't happen elsewhere in the stack.
 
-## 📚 References
+## References
 
 - [OWASP Top 10: A03 Injection](https://owasp.org/Top10/)
 - [OWASP SQL Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html)
